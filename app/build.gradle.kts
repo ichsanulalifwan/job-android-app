@@ -1,29 +1,53 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.dagger.hilt)
+}
+
+val localProperties = Properties().apply {
+    val file = File(rootProject.rootDir, "local.properties")
+    if (file.exists()) {
+        load(FileInputStream(file))
+    } else {
+        error("please add local.properties and key-value on root project")
+    }
 }
 
 android {
     namespace = "com.app.dans_android"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toIntOrNull()
 
     defaultConfig {
-        applicationId = "com.app.dans_android"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = libs.versions.bundleId.get()
+        minSdk = libs.versions.minSdk.get().toIntOrNull()
+        targetSdk = libs.versions.targetSdk.get().toIntOrNull()
+
+        versionCode = rootProject.extra.get("appVersionCode") as Int
+        versionName = rootProject.extra.get("appVersionName") as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        localProperties.apply {
+            buildConfigField("String", "API_ENDPOINT", getProperty("url.base.api"))
+        }
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
+
         release {
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -39,10 +63,11 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
     packaging {
         resources {
@@ -64,7 +89,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // UI
-    implementation (libs.glide)
+    implementation(libs.glide)
 
     // DI
     implementation(libs.dagger.hilt)
