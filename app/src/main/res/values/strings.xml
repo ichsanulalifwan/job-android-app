@@ -29,4 +29,7 @@
     <string name="url_not_available">URL Not Available</string>
     <string name="title_home">Home</string>
     <string name="title_account">Account</string>
+    <string name="text_sign_in_with_google">Sign In With Google</string>
+    <string name="or">OR</string>
+    <string name="text_sign_fb">Continue with Facebook</string>
 </resources>

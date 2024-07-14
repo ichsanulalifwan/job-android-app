@@ -1,121 +1,106 @@
 package com.app.dans_android.ui.login
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.EditText
+import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import com.app.dans_android.databinding.ActivityLoginBinding
+import com.app.dans_android.util.constant.FacebookOauthConstant
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
-//    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        binding = ActivityLoginBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//
-//        val username = binding.username
-//        val password = binding.password
-//        val login = binding.login
-//        val loading = binding.loading
-//
-//        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-//            .get(LoginViewModel::class.java)
-//
-//        loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-//            val loginState = it ?: return@Observer
-//
-//            // disable login button unless both username / password is valid
-//            login.isEnabled = loginState.isDataValid
-//
-//            if (loginState.usernameError != null) {
-//                username.error = getString(loginState.usernameError)
-//            }
-//            if (loginState.passwordError != null) {
-//                password.error = getString(loginState.passwordError)
-//            }
-//        })
-//
-//        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-//            val loginResult = it ?: return@Observer
-//
-//            loading.visibility = View.GONE
-//            if (loginResult.error != null) {
-//                showLoginFailed(loginResult.error)
-//            }
-//            if (loginResult.success != null) {
-//                updateUiWithUser(loginResult.success)
-//            }
-//            setResult(Activity.RESULT_OK)
-//
-//            //Complete and destroy login activity once successful
-//            finish()
-//        })
-//
-//        username.afterTextChanged {
-//            loginViewModel.loginDataChanged(
-//                username.text.toString(),
-//                password.text.toString()
-//            )
-//        }
-//
-//        password.apply {
-//            afterTextChanged {
-//                loginViewModel.loginDataChanged(
-//                    username.text.toString(),
-//                    password.text.toString()
-//                )
-//            }
-//
-//            setOnEditorActionListener { _, actionId, _ ->
-//                when (actionId) {
-//                    EditorInfo.IME_ACTION_DONE ->
-//                        loginViewModel.login(
-//                            username.text.toString(),
-//                            password.text.toString()
-//                        )
-//                }
-//                false
-//            }
-//
-//            login.setOnClickListener {
-//                loading.visibility = View.VISIBLE
-//                loginViewModel.login(username.text.toString(), password.text.toString())
-//            }
-//        }
-//    }
-//
-//    private fun updateUiWithUser(model: LoggedInUserView) {
-//        val welcome = getString(R.string.welcome)
-//        val displayName = model.displayName
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(
-//            applicationContext,
-//            "$welcome $displayName",
-//            Toast.LENGTH_LONG
-//        ).show()
-//    }
-//
-//    private fun showLoginFailed(@StringRes errorString: Int) {
-//        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
-//    }
-}
+    private val viewModel: LoginViewModel by viewModels()
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private var callbackManager: CallbackManager? = null
 
-/**
- * Extension function to simplify setting an afterTextChanged action to EditText components.
- */
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.apply {
+            btnGoogleLogin.setOnClickListener {
+
+            }
         }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        loginGoogle()
+        loginFacebook()
+    }
 
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
+    private fun loginGoogle() {
+        // Configure Google Sign In
+//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken(getString(R.string.default_web_client_id))
+//            .requestEmail()
+//            .build()
+//
+//        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
+
+    private fun loginFacebook() {
+        FacebookSdk.sdkInitialize(this)
+        this.let { AppEventsLogger.activateApp(it.application) }
+        callbackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance()
+            .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult) {
+                    val facebookAccessToken = result.accessToken.token
+                    Log.d("LoginFacebookToken", facebookAccessToken)
+
+                }
+
+                override fun onCancel() {
+                    Log.w("Login Facebook Cancel", "onCancel")
+                }
+
+                override fun onError(error: FacebookException) {
+                    Log.w("Login Facebook Error", error.toString())
+                    Toast.makeText(this@LoginActivity, error.toString(), Toast.LENGTH_LONG).show()
+                }
+            })
+
+        binding.btnFbLogin.setOnClickListener {
+            facebookSignOut()
+            LoginManager.getInstance().logInWithReadPermissions(
+                this, listOf(FacebookOauthConstant.PUBLIC_PROFILE, FacebookOauthConstant.EMAIL)
+            )
+        }
+    }
+
+    private fun showLoginFailed(@StringRes errorString: Int) {
+        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun facebookSignOut(message: String? = null) {
+        LoginManager.getInstance().logOut()
+        if (message != null) {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
 }
