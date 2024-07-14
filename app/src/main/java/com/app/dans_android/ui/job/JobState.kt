@@ -1,6 +1,6 @@
 package com.app.dans_android.ui.job
 
-import com.app.dans_android.data.api.model.Job
+import com.app.dans_android.data.job.api.model.Job
 
 data class JobState(
     val isLoading: Boolean = false,

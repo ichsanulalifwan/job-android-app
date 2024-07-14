@@ -2,9 +2,9 @@ package com.app.dans_android.ui.job
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.dans_android.data.api.model.Job
-import com.app.dans_android.data.api.repository.JobRepository
-import com.app.dans_android.data.implementation.network.ApiResponse
+import com.app.dans_android.data.job.api.model.Job
+import com.app.dans_android.data.job.api.repository.JobRepository
+import com.app.dans_android.data.job.implementation.network.ApiResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

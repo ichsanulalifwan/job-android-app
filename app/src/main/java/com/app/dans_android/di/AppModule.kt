@@ -1,9 +1,9 @@
 package com.app.dans_android.di
 
-import com.app.dans_android.data.api.repository.JobRepository
-import com.app.dans_android.data.implementation.network.ApiConfig
-import com.app.dans_android.data.implementation.network.JobApiService
-import com.app.dans_android.data.implementation.repository.JobRepositoryImpl
+import com.app.dans_android.data.job.api.repository.JobRepository
+import com.app.dans_android.data.job.implementation.network.ApiConfig
+import com.app.dans_android.data.job.implementation.network.JobApiService
+import com.app.dans_android.data.job.implementation.repository.JobRepositoryImpl
 import com.app.dans_android.data.qualifier.DefaultDispatcher
 import com.app.dans_android.data.qualifier.IoDispatcher
 import com.app.dans_android.data.qualifier.MainDispatcher

@@ -98,9 +98,12 @@ dependencies {
 
     // UI
     implementation(libs.glide)
+    implementation(libs.shimmer)
 
     // DI
     implementation(libs.dagger.hilt)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     ksp(libs.dagger.hilt.compiler)
 
     // Remote

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.dans_android.data.api.model.Job
+import com.app.dans_android.data.job.api.model.Job
 import com.app.dans_android.databinding.ItemJobListBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -39,7 +39,7 @@ internal class JobAdapter(
                 jobLocation.text = item.location
 
                 Glide.with(this.root)
-                    .load(item.url)
+                    .load(item.companyLogo)
                     .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(imgCompany)
 
