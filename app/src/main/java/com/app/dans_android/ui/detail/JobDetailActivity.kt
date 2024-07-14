@@ -31,6 +31,7 @@ class JobDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityJobDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initData()
         initListener()
@@ -90,7 +91,7 @@ class JobDetailActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(companyLogo)
                 .placeholder(R.drawable.ic_image_not_supported_24)
-                .error(R.drawable.baseline_error_24)
+                .error(R.drawable.ic_image_not_supported_24)
                 .into(binding.imgCompany)
         } else {
             binding.imgCompany.setImageResource(R.drawable.ic_image_not_supported_24)

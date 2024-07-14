@@ -3,17 +3,17 @@ package com.app.dans_android.data.job.implementation.mapper
 import com.app.dans_android.data.job.api.model.Job
 import com.app.dans_android.data.job.implementation.response.JobResponse
 
-internal fun JobResponse.toJob(): Job {
+internal fun JobResponse?.toJob(): Job {
     return Job(
-        id = id.orEmpty(),
-        companyLogo = companyLogo.orEmpty(),
-        howToApply = howToApply.orEmpty(),
-        description = description.orEmpty(),
-        company = company.orEmpty(),
-        companyUrl = companyUrl.orEmpty(),
-        location = location.orEmpty(),
-        type = type.orEmpty(),
-        title = title.orEmpty(),
-        url = url.orEmpty(),
+        id = this?.id.orEmpty(),
+        companyLogo = this?.companyLogo.orEmpty(),
+        howToApply = this?.howToApply.orEmpty(),
+        description = this?.description.orEmpty(),
+        company = this?.company.orEmpty(),
+        companyUrl = this?.companyUrl.orEmpty(),
+        location = this?.location.orEmpty(),
+        type = this?.type.orEmpty(),
+        title = this?.title.orEmpty(),
+        url = this?.url.orEmpty(),
     )
 }

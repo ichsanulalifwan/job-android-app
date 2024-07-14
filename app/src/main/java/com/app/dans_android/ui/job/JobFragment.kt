@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.dans_android.R
 import com.app.dans_android.data.job.api.model.Job
 import com.app.dans_android.databinding.FragmentJobBinding
 import com.app.dans_android.ui.detail.JobDetailActivity
@@ -58,6 +60,7 @@ class JobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initListener()
         initObserver()
         initLoadMore()
     }
@@ -72,12 +75,19 @@ class JobFragment : Fragment() {
         viewModel.onEvent(JobEvent.DefaultJob)
     }
 
+    private fun initListener() {
+        binding?.btnShowFilter?.setOnClickListener {
+            viewModel.onEvent(JobEvent.ShowFilter)
+        }
+    }
+
     private fun initObserver() {
         viewLifecycleOwner.observeState(source = viewModel.state) { state ->
             renderLoadingJobs(isLoadingJob = state.isLoading)
             renderLoadingPaginate(isLoadingPaginate = state.isLoadingPaginate)
             renderUIViewSuccess(isShowing = state.isUISuccessShowing)
             renderJobs(jobs = state.jobList)
+            renderFilter(isShowing = state.isShowFilter)
             handleJobsError(isError = state.isError, message = state.errorMessage)
         }
     }
@@ -163,6 +173,15 @@ class JobFragment : Fragment() {
 
     private fun renderUIViewSuccess(isShowing: Boolean) {
         binding?.rvJobList?.isVisible = isShowing
+    }
+
+    private fun renderFilter(isShowing: Boolean) {
+        binding?.apply {
+            lytFilter.isVisible = isShowing
+            btnShowFilter.background = if (isShowing) ContextCompat.getDrawable(
+                requireContext(), R.drawable.ic_arrow_up
+            ) else ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_down)
+        }
     }
 
     private fun renderJobs(jobs: List<Job>) {

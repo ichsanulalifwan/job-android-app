@@ -1,6 +1,5 @@
 package com.app.dans_android.data.job.implementation.network
 
-import com.app.dans_android.data.job.implementation.network.response.DataResponse
 import com.app.dans_android.data.job.implementation.response.JobResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,10 +14,10 @@ interface JobApiService {
         @Query("location") location: String?,
         @Query("full_time") fullTime: Boolean?,
         @Query("page") page: Int?,
-    ): Response<DataResponse<List<JobResponse>>>
+    ): Response<List<JobResponse>>
 
     @GET("recruitment/positions/{id}")
     suspend fun getJobDetail(
         @Path("id") jobId: String,
-    ): Response<DataResponse<JobResponse>>
+    ): Response<JobResponse>
 }

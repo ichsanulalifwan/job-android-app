@@ -7,6 +7,5 @@ sealed interface ApiResponse<out T> {
 
     data class Success<T>(
         val data: T,
-        val meta: Map<String, Any?> = mapOf(),
     ) : ApiResponse<T>
 }

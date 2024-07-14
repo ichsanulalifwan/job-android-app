@@ -1,7 +1,6 @@
 package com.app.dans_android.data.job.implementation.network.ext
 
 import com.app.dans_android.data.job.implementation.network.response.ApiResult
-import com.app.dans_android.data.job.implementation.network.response.DataResponse
 import com.app.dans_android.data.job.implementation.network.response.ErrorResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -11,7 +10,7 @@ import java.io.IOException
 import java.net.UnknownHostException
 
 suspend fun <T : Any> result(
-    remoteApi: suspend () -> Response<DataResponse<T>>,
+    remoteApi: suspend () -> Response<T>,
 ): ApiResult<T> = try {
     val response = remoteApi()
     handleResponse(response)
@@ -25,11 +24,11 @@ suspend fun <T : Any> result(
     ApiResult.Error(400, e.message.orEmpty(), e.message.orEmpty())
 }
 
-private fun <T : Any> handleResponse(response: Response<DataResponse<T>>): ApiResult<T> {
+private fun <T : Any> handleResponse(response: Response<T>): ApiResult<T> {
     val body = response.body()
 
     return if (response.isSuccessful && body != null) {
-        ApiResult.Success(data = body.data)
+        ApiResult.Success(data = body)
     } else {
         val error = response.errorBody()?.source()?.let {
             Moshi.Builder()

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.app.dans_android.R
 import com.app.dans_android.data.job.api.model.Job
 import com.app.dans_android.databinding.ItemJobListBinding
 import com.bumptech.glide.Glide
@@ -41,6 +42,7 @@ internal class JobAdapter(
                 Glide.with(this.root)
                     .load(item.companyLogo)
                     .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .error(R.drawable.ic_image_not_supported_24)
                     .into(imgCompany)
 
                 root.setOnClickListener {

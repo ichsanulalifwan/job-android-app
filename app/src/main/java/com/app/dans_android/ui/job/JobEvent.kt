@@ -10,4 +10,5 @@ sealed class JobEvent {
 
     data object LoadMore : JobEvent()
     data class JobDetail(val jobId: String = "") : JobEvent()
+    data object ShowFilter : JobEvent()
 }

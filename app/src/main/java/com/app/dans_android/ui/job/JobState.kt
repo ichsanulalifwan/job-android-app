@@ -5,6 +5,7 @@ import com.app.dans_android.data.job.api.model.Job
 data class JobState(
     val isLoading: Boolean = false,
     val isLoadingPaginate: Boolean = false,
+    val isShowFilter: Boolean = false,
     val isLoadMore: Boolean = false,
     val isUISuccessShowing: Boolean = false,
     val jobList: List<Job> = emptyList(),

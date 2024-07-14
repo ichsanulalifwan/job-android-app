@@ -54,6 +54,10 @@ class JobViewModel @Inject constructor(
                 loadingData()
                 getJobDetail(jobId = event.jobId)
             }
+
+            is JobEvent.ShowFilter -> {
+                showFilter()
+            }
         }
     }
 
@@ -64,6 +68,12 @@ class JobViewModel @Inject constructor(
                 isLoadingPaginate = false,
                 isUISuccessShowing = false,
             )
+        }
+    }
+
+    private fun showFilter() {
+        _state.update {
+            it.copy(isShowFilter = !state.value.isShowFilter)
         }
     }
 
@@ -137,6 +147,7 @@ class JobViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         isError = true,
+                        isLoading = false,
                         errorMessage = response.message,
                     )
                 }
@@ -173,6 +184,7 @@ class JobViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         isError = true,
+                        isLoading = false,
                         errorMessage = response.message,
                     )
                 }
