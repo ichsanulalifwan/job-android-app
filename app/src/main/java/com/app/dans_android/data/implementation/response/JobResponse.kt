@@ -15,9 +15,6 @@ data class JobResponse(
     @Json(name="how_to_apply")
     val howToApply: String? = null,
 
-    @Json(name="created_at")
-    val createdAt: String? = null,
-
     @Json(name="description")
     val description: String? = null,
 
