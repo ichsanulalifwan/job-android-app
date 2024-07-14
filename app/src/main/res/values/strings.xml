@@ -27,4 +27,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="url_not_available">URL Not Available</string>
+    <string name="title_home">Home</string>
+    <string name="title_account">Account</string>
 </resources>
