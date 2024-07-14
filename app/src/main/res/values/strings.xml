@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">dans_android</string>
+    <string name="text_job_detail">JOB DETAIL</string>
     <string name="company_image">Company Image</string>
     <string name="company">Company</string>
     <string name="text_go_to_website"><u>Go To Website</u></string>
